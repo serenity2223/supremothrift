@@ -1,0 +1,2368 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Supremo Finds — Thrift Like Royalty</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Syne:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --cream: #F5EFE0;
+      --warm-white: #FAF7F2;
+      --char: #1A1210;
+      --rust: #B5451B;
+      --gold: #C9973A;
+      --sage: #7A8C6E;
+      --dusty: #9B8B7A;
+      --card-bg: #FFFDF9;
+      --shadow: 0 8px 40px rgba(26, 18, 16, 0.13);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Syne', sans-serif;
+      background: var(--warm-white);
+      color: var(--char);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Custom cursor - ALWAYS VISIBLE */
+    .cursor {
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--rust);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.15s ease, background 0.15s;
+      opacity: 1;
+    }
+
+    .cursor-dot {
+      width: 5px;
+      height: 5px;
+      background: var(--rust);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transition: 0.05s;
+      opacity: 1;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 60px;
+      background: transparent;
+      transition: background 0.4s, box-shadow 0.4s;
+    }
+
+    nav.scrolled {
+      background: rgba(250, 247, 242, 0.97);
+      box-shadow: 0 2px 20px rgba(26, 18, 16, 0.08);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--char);
+      letter-spacing: -0.5px;
+      text-decoration: none;
+    }
+
+    .nav-logo span {
+      color: var(--rust);
+      font-style: italic;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--char);
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -3px;
+      width: 0;
+      height: 2px;
+      background: var(--rust);
+      transition: width 0.3s;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .cart-btn {
+      position: relative;
+      background: var(--rust);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 10px 24px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.82rem;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .cart-btn:hover {
+      background: var(--char);
+      transform: scale(1.04);
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background: var(--gold);
+      color: var(--char);
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      font-size: 0.7rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* HERO PARALLAX */
+    .hero {
+      height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: var(--char);
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1800&q=80') center/cover no-repeat;
+      opacity: 0.35;
+      transform: scale(1.1);
+      will-change: transform;
+    }
+
+    .hero-grain {
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+      opacity: 0.5;
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      color: #fff;
+      max-width: 800px;
+      padding: 0 24px;
+    }
+
+    .hero-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.3s forwards;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.5rem, 8vw, 7rem);
+      font-weight: 900;
+      line-height: 0.9;
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.5s forwards;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-sub {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.7);
+      max-width: 480px;
+      margin: 0 auto 44px;
+      line-height: 1.7;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.7s forwards;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.9s forwards;
+    }
+
+    /* CYCLING TEXT STYLES */
+    .cycling-text-container {
+      margin-top: 2rem;
+      height: 3rem;
+      position: relative;
+    }
+
+    .cycling-text {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+      font-size: 1.2rem;
+      font-style: italic;
+      color: rgba(255, 255, 255, 0.9);
+      text-align: center;
+    }
+
+    .cycling-text.active {
+      opacity: 1;
+    }
+
+    /* INPUT STYLES */
+    .input-container {
+      margin-top: 3rem;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+
+
+    .btn-primary {
+      background: var(--rust);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 16px 40px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 0.88rem;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.25s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary:hover {
+      background: var(--gold);
+      color: var(--char);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: #fff;
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      border-radius: 50px;
+      padding: 16px 40px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 0.88rem;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.25s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-outline:hover {
+      border-color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-family: 'Space Mono', monospace;
+      animation: bounce 2s infinite;
+    }
+
+    .hero-scroll::before {
+      content: '';
+      width: 1px;
+      height: 60px;
+      background: linear-gradient(transparent, rgba(255, 255, 255, 0.4));
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes bounce {
+
+      0%,
+      100% {
+        transform: translateX(-50%) translateY(0);
+      }
+
+      50% {
+        transform: translateX(-50%) translateY(8px);
+      }
+    }
+
+    /* MARQUEE */
+    .marquee-wrap {
+      background: var(--rust);
+      overflow: hidden;
+      padding: 14px 0;
+      white-space: nowrap;
+    }
+
+    .marquee-inner {
+      display: inline-flex;
+      gap: 60px;
+      animation: marquee 18s linear infinite;
+    }
+
+    .marquee-inner span {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.85);
+      letter-spacing: 1px;
+    }
+
+    .marquee-inner span.dot {
+      color: var(--gold);
+      font-style: normal;
+    }
+
+    @keyframes marquee {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    /* SECTION HEADER */
+    .section-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .section-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--rust);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 900;
+      line-height: 1.1;
+    }
+
+    .section-title em {
+      font-style: italic;
+      color: var(--dusty);
+    }
+
+    /* CATEGORIES */
+    .categories {
+      padding: 100px 60px;
+      background: var(--cream);
+    }
+
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .cat-card {
+      position: relative;
+      height: 300px;
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+
+    .cat-card:first-child {
+      grid-column: span 2;
+      height: 380px;
+    }
+
+    .cat-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .cat-card:hover .cat-img {
+      transform: scale(1.07);
+    }
+
+    .cat-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, transparent 40%, rgba(26, 18, 16, 0.75));
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 28px;
+    }
+
+    .cat-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .cat-count {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.6);
+      letter-spacing: 1px;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .cat-arrow {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 36px;
+      height: 36px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.1rem;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: all 0.3s;
+    }
+
+    .cat-card:hover .cat-arrow {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* PRODUCTS CAROUSEL */
+    .products-section {
+      padding: 100px 0;
+      background: var(--warm-white);
+    }
+
+    .products-header {
+      padding: 0 60px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 48px;
+    }
+
+    .carousel-controls {
+      display: flex;
+      gap: 10px;
+    }
+
+    .ctrl-btn {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 2px solid var(--char);
+      background: transparent;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .ctrl-btn:hover {
+      background: var(--char);
+      color: #fff;
+    }
+
+    .carousel-track-wrap {
+      overflow: hidden;
+      padding: 0 60px;
+    }
+
+    .carousel-track {
+      display: flex;
+      gap: 24px;
+      transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      will-change: transform;
+    }
+
+    .product-card {
+      min-width: 280px;
+      background: var(--card-bg);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      position: relative;
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .product-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(26, 18, 16, 0.18);
+    }
+
+    .product-img-wrap {
+      position: relative;
+      height: 300px;
+      overflow: hidden;
+      background: var(--cream);
+    }
+
+    .product-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+
+    .product-card:hover .product-img {
+      transform: scale(1.05);
+    }
+
+    .badge {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: var(--rust);
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 50px;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .badge.gold {
+      background: var(--gold);
+      color: var(--char);
+    }
+
+    .badge.sage {
+      background: var(--sage);
+    }
+
+    .wishlist-btn {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 36px;
+      height: 36px;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(8px);
+      border: none;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      opacity: 0;
+    }
+
+    .product-card:hover .wishlist-btn {
+      opacity: 1;
+    }
+
+    .wishlist-btn:hover {
+      background: var(--rust);
+      color: #fff;
+      transform: scale(1.1);
+    }
+
+    .product-info {
+      padding: 20px 22px 22px;
+    }
+
+    .product-category {
+      font-size: 0.68rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--dusty);
+      margin-bottom: 6px;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .product-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    .product-condition {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.7rem;
+      background: rgba(122, 140, 110, 0.15);
+      color: var(--sage);
+      padding: 3px 10px;
+      border-radius: 50px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 14px;
+    }
+
+    .product-price-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .product-price {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--rust);
+    }
+
+    .product-original {
+      font-size: 0.82rem;
+      color: var(--dusty);
+      text-decoration: line-through;
+      margin-left: 8px;
+    }
+
+    .add-to-cart {
+      background: var(--char);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 10px 20px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.78rem;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .add-to-cart:hover {
+      background: var(--rust);
+      transform: scale(1.04);
+    }
+
+    .add-to-cart.added {
+      background: var(--sage);
+    }
+
+    .reserve-btn {
+      background: transparent;
+      color: var(--char);
+      border: 2px solid var(--char);
+      border-radius: 50px;
+      padding: 8px 16px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 8px;
+      width: 100%;
+    }
+
+    .reserve-btn:hover {
+      background: var(--char);
+      color: #fff;
+    }
+
+    /* PARALLAX QUOTE */
+    .parallax-quote {
+      position: relative;
+      height: 420px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: var(--char);
+    }
+
+    .parallax-bg {
+      position: absolute;
+      inset: -60px;
+      background: url('https://images.unsplash.com/photo-1612817159949-195b6eb9e31a?w=1800&q=80') center/cover;
+      opacity: 0.2;
+      will-change: transform;
+    }
+
+    .parallax-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      color: #fff;
+      padding: 0 60px;
+    }
+
+    .parallax-content blockquote {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-style: italic;
+      line-height: 1.3;
+      margin-bottom: 20px;
+      max-width: 800px;
+    }
+
+    .parallax-content cite {
+      font-size: 0.78rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-family: 'Space Mono', monospace;
+      font-style: normal;
+    }
+
+    /* ABOUT STRIP */
+    .about-strip {
+      padding: 100px 60px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      background: var(--cream);
+    }
+
+    .about-text .section-header {
+      text-align: left;
+      margin-bottom: 28px;
+    }
+
+    .about-text p {
+      color: var(--dusty);
+      line-height: 1.85;
+      font-size: 0.96rem;
+      margin-bottom: 16px;
+    }
+
+    .stats-row {
+      display: flex;
+      gap: 40px;
+      margin-top: 36px;
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem;
+      font-weight: 900;
+      color: var(--rust);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--dusty);
+      font-family: 'Space Mono', monospace;
+    }
+
+    .about-img-collage {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 14px;
+    }
+
+    .collage-img {
+      border-radius: 14px;
+      overflow: hidden;
+      height: 220px;
+    }
+
+    .collage-img:first-child {
+      grid-row: span 2;
+      height: 100%;
+    }
+
+    .collage-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--char);
+      color: rgba(255, 255, 255, 0.7);
+      padding: 80px 60px 40px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 60px;
+      margin-bottom: 60px;
+    }
+
+    .footer-brand .nav-logo {
+      color: #fff;
+      display: block;
+      margin-bottom: 16px;
+      font-size: 1.6rem;
+    }
+
+    .footer-brand p {
+      font-size: 0.88rem;
+      line-height: 1.7;
+      max-width: 280px;
+    }
+
+    .footer-col h4 {
+      font-size: 0.72rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: #fff;
+      margin-bottom: 20px;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-col ul a {
+      color: rgba(255, 255, 255, 0.55);
+      text-decoration: none;
+      font-size: 0.88rem;
+      transition: color 0.2s;
+    }
+
+    .footer-col ul a:hover {
+      color: var(--gold);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+    }
+
+    .pay-badges {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .pay-badge {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.7);
+      font-family: 'Space Mono', monospace;
+    }
+
+    /* MODAL BASE */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(26, 18, 16, 0.7);
+      backdrop-filter: blur(8px);
+      z-index: 5000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-backdrop.active {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--card-bg);
+      border-radius: 24px;
+      padding: 0;
+      max-width: 480px;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      animation: modalIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: scale(0.88) translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .modal-header {
+      background: var(--char);
+      color: #fff;
+      padding: 28px 32px 24px;
+      position: relative;
+    }
+
+    .modal-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      margin-bottom: 6px;
+    }
+
+    .modal-header p {
+      font-size: 0.82rem;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 34px;
+      height: 34px;
+      background: rgba(255, 255, 255, 0.12);
+      border: none;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-close:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .modal-body {
+      padding: 28px 32px 32px;
+    }
+
+    /* CART MODAL */
+    .cart-items {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .cart-item {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      padding: 14px;
+      background: var(--cream);
+      border-radius: 14px;
+    }
+
+    .cart-item-img {
+      width: 64px;
+      height: 64px;
+      border-radius: 10px;
+      object-fit: cover;
+      background: var(--dusty);
+    }
+
+    .cart-item-info {
+      flex: 1;
+    }
+
+    .cart-item-name {
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .cart-item-price {
+      color: var(--rust);
+      font-weight: 800;
+      font-size: 0.95rem;
+    }
+
+    .cart-item-remove {
+      background: none;
+      border: none;
+      color: var(--dusty);
+      font-size: 1rem;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .cart-item-remove:hover {
+      color: var(--rust);
+    }
+
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      border-top: 2px solid var(--cream);
+      margin-bottom: 20px;
+    }
+
+    .cart-total span:first-child {
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .cart-total-amount {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--rust);
+      font-family: 'Playfair Display', serif;
+    }
+
+    .checkout-btn {
+      width: 100%;
+      background: var(--rust);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 16px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.25s;
+      letter-spacing: 1px;
+    }
+
+    .checkout-btn:hover {
+      background: var(--char);
+      transform: translateY(-2px);
+    }
+
+    .cart-empty {
+      text-align: center;
+      padding: 40px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--dusty);
+      font-style: italic;
+    }
+
+    /* PAYMENT MODAL */
+    .payment-options {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .payment-opt {
+      border: 2px solid var(--cream);
+      border-radius: 14px;
+      padding: 18px 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: relative;
+    }
+
+    .payment-opt:hover {
+      border-color: var(--rust);
+    }
+
+    .payment-opt.selected {
+      border-color: var(--rust);
+      background: rgba(181, 69, 27, 0.05);
+    }
+
+    .payment-opt-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+
+    .payment-opt-icon.gcash {
+      background: #0072DD;
+    }
+
+    .payment-opt-icon.maya {
+      background: #00C851;
+    }
+
+    .payment-opt-icon.cash {
+      background: var(--gold);
+    }
+
+    .payment-opt-info {
+      flex: 1;
+    }
+
+    .payment-opt-name {
+      font-weight: 800;
+      font-size: 0.95rem;
+      margin-bottom: 3px;
+    }
+
+    .payment-opt-desc {
+      font-size: 0.78rem;
+      color: var(--dusty);
+    }
+
+    .payment-radio {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid var(--dusty);
+      position: relative;
+      flex-shrink: 0;
+      transition: border-color 0.2s;
+    }
+
+    .payment-opt.selected .payment-radio {
+      border-color: var(--rust);
+      background: var(--rust);
+      box-shadow: inset 0 0 0 3px white;
+    }
+
+    .payment-details {
+      display: none;
+      margin-top: 8px;
+    }
+
+    .payment-opt.selected .payment-details {
+      display: block;
+    }
+
+    .payment-input-group {
+      margin-top: 10px;
+    }
+
+    .payment-input-group label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--dusty);
+      display: block;
+      margin-bottom: 6px;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .payment-input-group input {
+      width: 100%;
+      border: 2px solid var(--cream);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+      background: var(--warm-white);
+    }
+
+    .payment-input-group input:focus {
+      border-color: var(--rust);
+    }
+
+    .confirm-payment-btn {
+      width: 100%;
+      background: var(--rust);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 16px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.25s;
+      letter-spacing: 1px;
+    }
+
+    .confirm-payment-btn:hover {
+      background: var(--sage);
+    }
+
+    /* RESERVATION MODAL */
+    .reservation-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--dusty);
+      font-family: 'Space Mono', monospace;
+    }
+
+    .form-group input,
+    .form-group select {
+      border: 2px solid var(--cream);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+      background: var(--warm-white);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--rust);
+    }
+
+    .reservation-item-preview {
+      background: var(--cream);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .reservation-item-preview img {
+      width: 60px;
+      height: 60px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+    .reservation-item-preview .name {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+    }
+
+    .reservation-item-preview .price {
+      color: var(--rust);
+      font-weight: 800;
+      font-size: 0.9rem;
+      margin-top: 4px;
+    }
+
+    .submit-reservation {
+      background: var(--char);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 16px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.25s;
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+
+    .submit-reservation:hover {
+      background: var(--rust);
+    }
+
+    /* SUCCESS MODAL */
+    .success-body {
+      text-align: center;
+      padding: 48px 32px;
+    }
+
+    .success-icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      display: block;
+      animation: pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes pop {
+      from {
+        transform: scale(0);
+      }
+
+      to {
+        transform: scale(1);
+      }
+    }
+
+    .success-body h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      margin-bottom: 12px;
+    }
+
+    .success-body p {
+      color: var(--dusty);
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+
+    .success-ref {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 2px;
+      background: var(--cream);
+      padding: 8px 16px;
+      border-radius: 50px;
+      display: inline-block;
+      margin-bottom: 28px;
+      color: var(--dusty);
+    }
+
+    /* TOAST */
+    .toast-wrap {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 9000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toast {
+      background: var(--char);
+      color: #fff;
+      padding: 14px 22px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: toastIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 8px 30px rgba(26, 18, 16, 0.2);
+      max-width: 320px;
+    }
+
+    .toast.success {
+      background: var(--sage);
+    }
+
+    .toast.error {
+      background: var(--rust);
+    }
+
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateX(60px) scale(0.9);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+      }
+    }
+
+    @keyframes toastOut {
+      to {
+        opacity: 0;
+        transform: translateX(60px) scale(0.9);
+      }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav {
+        padding: 16px 24px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .categories {
+        padding: 60px 24px;
+      }
+
+      .cat-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .cat-card:first-child {
+        grid-column: span 2;
+      }
+
+      .products-header {
+        padding: 0 24px;
+      }
+
+      .carousel-track-wrap {
+        padding: 0 24px;
+      }
+
+      .about-strip {
+        grid-template-columns: 1fr;
+        padding: 60px 24px;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      footer {
+        padding: 60px 24px 32px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Custom cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-dot" id="cursorDot"></div>
+
+  <!-- Toast container -->
+  <div class="toast-wrap" id="toastWrap"></div>
+
+  <!-- NAV -->
+  <nav id="mainNav">
+    <a href="#" class="nav-logo">Supremo<span>Finds</span></a>
+    <ul class="nav-links">
+      <li><a href="#new">New Drops</a></li>
+      <li><a href="#categories">Categories</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#">Sell With Us</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="cart-btn" id="openCartBtn" onclick="openCart()">
+        🛒 Cart
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-grain"></div>
+    <div class="hero-content">
+      <p class="hero-tag">✦ Est. 2025 — Dagupan, PH</p>
+      <h1 class="hero-title">Thrift Like<br>a <em>Legend</em></h1>
+      <p class="hero-sub">Curated pre-loved fashion, vintage gems, and one-of-a-kind finds — all in one place.</p>
+      <div class="hero-btns">
+        <a href="#new" class="btn-primary">Shop Now</a>
+        <a href="#about" class="btn-outline">Our Story</a>
+      </div>
+    </div>
+    <div class="hero-scroll">scroll</div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-wrap">
+    <div class="marquee-inner" id="marqueeInner">
+      <span>Free Shipping Over ₱500</span><span class="dot">✦</span>
+      <span>Authenticated & Quality Checked</span><span class="dot">✦</span>
+      <span>GCash & Maya Accepted</span><span class="dot">✦</span>
+      <span>Reservations Available</span><span class="dot">✦</span>
+      <span>100% Genuine Pre-Loved Items</span><span class="dot">✦</span>
+      <span>Free Shipping Over ₱500</span><span class="dot">✦</span>
+      <span>Authenticated & Quality Checked</span><span class="dot">✦</span>
+      <span>GCash & Maya Accepted</span><span class="dot">✦</span>
+      <span>Reservations Available</span><span class="dot">✦</span>
+      <span>100% Genuine Pre-Loved Items</span><span class="dot">✦</span>
+    </div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <section class="categories" id="categories">
+    <div class="section-header">
+      <span class="section-tag">Browse by Type</span>
+      <h2 class="section-title">Find Your <em>Vibe</em></h2>
+    </div>
+    <div class="cat-grid">
+      <div class="cat-card">
+        <img class="cat-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80" alt="Tops">
+        <div class="cat-overlay">
+          <p class="cat-name">Tops & Shirts</p>
+          <p class="cat-count">142 Items</p>
+          <div class="cat-arrow">→</div>
+        </div>
+      </div>
+      <div class="cat-card">
+        <img class="cat-img" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80" alt="Shoes">
+        <div class="cat-overlay">
+          <p class="cat-name">Kicks & Shoes</p>
+          <p class="cat-count">89 Items</p>
+          <div class="cat-arrow">→</div>
+        </div>
+      </div>
+      <div class="cat-card">
+        <img class="cat-img" src="https://images.unsplash.com/photo-1547949003-9792a18a2601?w=600&q=80" alt="Bags">
+        <div class="cat-overlay">
+          <p class="cat-name">Bags & Accessories</p>
+          <p class="cat-count">63 Items</p>
+          <div class="cat-arrow">→</div>
+        </div>
+      </div>
+      <div class="cat-card">
+        <img class="cat-img" src="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&q=80" alt="Jackets">
+        <div class="cat-overlay">
+          <p class="cat-name">Jackets & Outerwear</p>
+          <p class="cat-count">57 Items</p>
+          <div class="cat-arrow">→</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS CAROUSEL -->
+  <section class="products-section" id="new">
+    <div class="products-header">
+      <div>
+        <span class="section-tag">Just Dropped</span>
+        <h2 class="section-title">New <em>Finds</em></h2>
+      </div>
+      <div class="carousel-controls">
+        <button class="ctrl-btn" id="prevBtn" onclick="scrollCarousel(-1)">←</button>
+        <button class="ctrl-btn" id="nextBtn" onclick="scrollCarousel(1)">→</button>
+      </div>
+    </div>
+    <div class="carousel-track-wrap">
+      <div class="carousel-track" id="carouselTrack"></div>
+    </div>
+  </section>
+
+  <!-- PARALLAX QUOTE -->
+  <section class="parallax-quote">
+    <div class="parallax-bg" id="parallaxBg"></div>
+    <div class="parallax-content">
+      <blockquote>"Thrift bold — wear <em>history</em>, not hype."</blockquote>
+      <cite>— The Supremo Finds Philosophy</cite>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about-strip" id="about">
+    <div class="about-text">
+      <div class="section-header">
+        <span class="section-tag">Who We Are</span>
+        <h2 class="section-title">The Story of<br><em>Supremo Finds</em></h2>
+      </div>
+      <p>Born from a love of vintage fashion and sustainable living, Supremo Finds started as a small thrift stall in
+        the streets of Dagupan. Today, we're the Philippines' most trusted online thrift destination — curating only the
+        best pre-loved items for fashion-forward Filipinos.</p>
+      <p>Every item is hand-inspected, quality-checked, and given a second shot at life. We believe that looking good
+        shouldn't cost the earth — or your wallet.</p>
+      <div class="stats-row">
+        <div class="stat">
+          <span class="stat-num">4.8K+</span>
+          <span class="stat-label">Items Sold</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">2.1K</span>
+          <span class="stat-label">Happy Customers</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">98%</span>
+          <span class="stat-label">Satisfaction</span>
+        </div>
+      </div>
+    </div>
+    <div class="about-img-collage">
+      <div class="collage-img">
+        <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=600&q=80" alt="Thrift">
+      </div>
+      <div class="collage-img">
+        <img src="https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=600&q=80" alt="Thrift">
+      </div>
+      <div class="collage-img">
+        <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80" alt="Thrift">
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="nav-logo" href="#">Supremo<span style="color:var(--rust);font-style:italic">Finds</span></a>
+        <p>Curated pre-loved fashion for every budget. Sustainable, stylish, and supremely good value.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="#">New Drops</a></li>
+          <li><a href="#">Tops & Shirts</a></li>
+          <li><a href="#">Kicks & Shoes</a></li>
+          <li><a href="#">Bags</a></li>
+          <li><a href="#">Jackets</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Help</h4>
+        <ul>
+          <li><a href="#">How to Order</a></li>
+          <li><a href="#">Reservations</a></li>
+          <li><a href="#">Payment Modes</a></li>
+          <li><a href="#">Returns Policy</a></li>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Follow Us</h4>
+        <ul>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">Facebook</a></li>
+          <li><a href="#">TikTok</a></li>
+          <li><a href="#">Shopee</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Supremo Finds. All rights reserved. Made with 🤎 in Dagupan.</span>
+      <div class="pay-badges">
+        <span class="pay-badge">GCASH</span>
+        <span class="pay-badge">MAYA</span>
+        <span class="pay-badge">EN CASH</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== MODALS ===== -->
+
+  <!-- CART MODAL -->
+  <div class="modal-backdrop" id="cartModal">
+    <div class="modal" style="max-width:520px">
+      <div class="modal-header">
+        <h2>Your Cart 🛒</h2>
+        <p id="cartItemCount">0 items</p>
+        <button class="modal-close" onclick="closeModal('cartModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="cart-items" id="cartItemsList"></div>
+        <div id="cartEmpty" class="cart-empty" style="display:none">
+          <p>🛍️ Your cart is empty.<br><em>Start finding treasures!</em></p>
+        </div>
+        <div id="cartFooter">
+          <div class="cart-total">
+            <span>Total</span>
+            <span class="cart-total-amount" id="cartTotalAmount">₱0</span>
+          </div>
+          <button class="checkout-btn" onclick="openPayment()">Proceed to Checkout →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAYMENT MODAL -->
+  <div class="modal-backdrop" id="paymentModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Mode of Payment 💳</h2>
+        <p>Choose how you'd like to pay</p>
+        <button class="modal-close" onclick="closeModal('paymentModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="payment-options">
+          <div class="payment-opt" onclick="selectPayment('gcash', this)">
+            <div class="payment-opt-icon gcash">💙</div>
+            <div class="payment-opt-info">
+              <div class="payment-opt-name">GCash</div>
+              <div class="payment-opt-desc">Pay via GCash e-wallet instantly</div>
+              <div class="payment-details">
+                <div class="payment-input-group">
+                  <label>GCash Number</label>
+                  <input type="tel" placeholder="09XX-XXX-XXXX" maxlength="13" id="gcashNum">
+                </div>
+              </div>
+            </div>
+            <div class="payment-radio"></div>
+          </div>
+
+          <div class="payment-opt" onclick="selectPayment('maya', this)">
+            <div class="payment-opt-icon maya">💚</div>
+            <div class="payment-opt-info">
+              <div class="payment-opt-name">Maya (PayMaya)</div>
+              <div class="payment-opt-desc">Pay securely via Maya wallet</div>
+              <div class="payment-details">
+                <div class="payment-input-group">
+                  <label>Maya Number</label>
+                  <input type="tel" placeholder="09XX-XXX-XXXX" maxlength="13" id="mayaNum">
+                </div>
+              </div>
+            </div>
+            <div class="payment-radio"></div>
+          </div>
+
+          <div class="payment-opt" onclick="selectPayment('cash', this)">
+            <div class="payment-opt-icon cash">💵</div>
+            <div class="payment-opt-info">
+              <div class="payment-opt-name">En Cash (Cash on Pickup)</div>
+              <div class="payment-opt-desc">Pay in person when you claim your item</div>
+              <div class="payment-details">
+                <div class="payment-input-group">
+                  <label>Preferred Pickup Date</label>
+                  <input type="date" id="pickupDate">
+                </div>
+              </div>
+            </div>
+            <div class="payment-radio"></div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:16px;">
+          <div class="payment-input-group">
+            <label>Full Name</label>
+            <input type="text" placeholder="Juan dela Cruz" id="payFullName">
+          </div>
+        </div>
+        <div style="margin-bottom:20px;">
+          <div class="payment-input-group">
+            <label>Contact Number</label>
+            <input type="tel" placeholder="09XX-XXX-XXXX" id="payContact">
+          </div>
+        </div>
+
+        <div class="cart-total" style="margin-bottom:16px;">
+          <span>Order Total</span>
+          <span class="cart-total-amount" id="payTotalAmount">₱0</span>
+        </div>
+
+        <button class="confirm-payment-btn" onclick="confirmPayment()">Confirm Payment →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESERVATION MODAL -->
+  <div class="modal-backdrop" id="reservationModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Reserve this Item 📌</h2>
+        <p>Hold it for up to 3 days</p>
+        <button class="modal-close" onclick="closeModal('reservationModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="reservation-item-preview" id="reservationItemPreview"></div>
+        <br>
+        <div class="reservation-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label>First Name</label>
+              <input type="text" placeholder="Juan" id="resFirstName">
+            </div>
+            <div class="form-group">
+              <label>Last Name</label>
+              <input type="text" placeholder="dela Cruz" id="resLastName">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Contact Number</label>
+            <input type="tel" placeholder="09XX-XXX-XXXX" id="resContact">
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" placeholder="juan@email.com" id="resEmail">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Reserve From</label>
+              <input type="date" id="resDateFrom">
+            </div>
+            <div class="form-group">
+              <label>Pick Up By</label>
+              <input type="date" id="resDateTo">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Payment Mode</label>
+            <select id="resPayment">
+              <option value="">-- Select --</option>
+              <option value="gcash">GCash (Downpayment)</option>
+              <option value="maya">Maya (Downpayment)</option>
+              <option value="cash">En Cash (On Pickup)</option>
+            </select>
+          </div>
+          <button class="submit-reservation" onclick="submitReservation()">Confirm Reservation →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUCCESS MODAL -->
+  <div class="modal-backdrop" id="successModal">
+    <div class="modal" style="max-width:400px">
+      <div class="modal-body">
+        <div class="success-body">
+          <span class="success-icon" id="successIcon">🎉</span>
+          <h2 id="successTitle">Order Confirmed!</h2>
+          <p id="successMsg">Your order has been received. We'll contact you shortly.</p>
+          <div class="success-ref" id="successRef">REF: SF-000000</div>
+          <button class="checkout-btn" onclick="closeModal('successModal');closeModal('paymentModal');">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ============ DATA ============
+    const products = [
+      { id: 1, name: 'Vintage Levi\'s 501 Jeans', category: 'Bottoms', price: 650, original: 2800, condition: 'Like New', badge: 'Hot', badgeType: '', img: 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&q=80' },
+      { id: 2, name: 'Ralph Lauren Polo Shirt', category: 'Tops', price: 390, original: 1500, condition: 'Excellent', badge: 'New', badgeType: 'gold', img: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=600&q=80' },
+      { id: 3, name: 'Nike Air Force 1 (US9)', category: 'Shoes', price: 1200, original: 5500, condition: 'Good', badge: 'Rare', badgeType: 'sage', img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80' },
+      { id: 4, name: 'Vintage Denim Jacket', category: 'Outerwear', price: 850, original: 3200, condition: 'Very Good', badge: 'Hot', badgeType: '', img: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&q=80' },
+      { id: 5, name: 'Coach Leather Bag', category: 'Bags', price: 1600, original: 8000, condition: 'Like New', badge: 'New', badgeType: 'gold', img: 'https://images.unsplash.com/photo-1547949003-9792a18a2601?w=600&q=80' },
+      { id: 6, name: 'Tommy Hilfiger Crewneck', category: 'Tops', price: 420, original: 1800, condition: 'Excellent', badge: '', badgeType: '', img: 'https://images.unsplash.com/photo-1625910513902-b0f5e3de2d4e?w=600&q=80' },
+      { id: 7, name: 'Vintage Adidas Windbreaker', category: 'Outerwear', price: 720, original: 2500, condition: 'Good', badge: 'Rare', badgeType: 'sage', img: 'https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80' },
+      { id: 8, name: 'Leather Oxford Shoes (EU42)', category: 'Shoes', price: 980, original: 4200, condition: 'Very Good', badge: '', badgeType: '', img: 'https://images.unsplash.com/photo-1449505278894-297fdb3edbc1?w=600&q=80' },
+    ];
+
+    // ============ CART STATE ============
+    let cart = [];
+    let currentReserveItem = null;
+    let selectedPayment = null;
+    let carouselIndex = 0;
+    const cardWidth = 304; // 280 + 24 gap
+
+    // ============ RENDER CAROUSEL ============
+    function renderCarousel() {
+      const track = document.getElementById('carouselTrack');
+      track.innerHTML = products.map(p => `
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <img class="product-img" src="${p.img}" alt="${p.name}">
+        ${p.badge ? `<span class="badge ${p.badgeType}">${p.badge}</span>` : ''}
+        <button class="wishlist-btn" onclick="showToast('❤️ Added to wishlist!')">♡</button>
+      </div>
+      <div class="product-info">
+        <p class="product-category">${p.category}</p>
+        <h3 class="product-name">${p.name}</h3>
+        <span class="product-condition">✓ ${p.condition}</span>
+        <div class="product-price-row">
+          <div>
+            <span class="product-price">₱${p.price.toLocaleString()}</span>
+            <span class="product-original">₱${p.original.toLocaleString()}</span>
+          </div>
+          <button class="add-to-cart" id="addBtn-${p.id}" onclick="addToCart(${p.id})">Add to Cart</button>
+        </div>
+        <button class="reserve-btn" onclick="openReservation(${p.id})">📌 Reserve Item</button>
+      </div>
+    </div>
+  `).join('');
+    }
+
+
+    function scrollCarousel(dir) {
+      const track = document.getElementById('carouselTrack');
+      const maxIndex = products.length - 3; // adjust based on how many cards fit
+      carouselIndex = Math.max(0, Math.min(carouselIndex + dir, maxIndex));
+      track.style.transform = `translateX(-${carouselIndex * cardWidth}px)`;
+    }
+
+
+    // ============ CART ============
+    function addToCart(productId) {
+      const product = products.find(p => p.id === productId);
+      const existing = cart.find(i => i.id === productId);
+      if (existing) {
+        showToast('⚠️ Already in cart!');
+        return;
+      }
+      cart.push({ ...product, qty: 1 });
+      updateCartCount();
+
+      const btn = document.getElementById(`addBtn-${productId}`);
+      if (btn) {
+        btn.textContent = '✓ Added';
+        btn.classList.add('added');
+        setTimeout(() => {
+          btn.textContent = 'Add to Cart';
+          btn.classList.remove('added');
+        }, 2000);
+      }
+
+      showToast(`🛒 ${product.name} added to cart!`, 'success');
+    }
+
+    function removeFromCart(productId) {
+      cart = cart.filter(i => i.id !== productId);
+      updateCartCount();
+      renderCartModal();
+      showToast('Removed from cart');
+    }
+
+    function updateCartCount() {
+      document.getElementById('cartCount').textContent = cart.length;
+    }
+
+    function getCartTotal() {
+      return cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+    }
+
+    function openCart() {
+      renderCartModal();
+      openModal('cartModal');
+    }
+
+    function renderCartModal() {
+      const list = document.getElementById('cartItemsList');
+      const empty = document.getElementById('cartEmpty');
+      const footer = document.getElementById('cartFooter');
+      const countEl = document.getElementById('cartItemCount');
+      const totalEl = document.getElementById('cartTotalAmount');
+      const payTotal = document.getElementById('payTotalAmount');
+
+      countEl.textContent = `${cart.length} item${cart.length !== 1 ? 's' : ''}`;
+      const total = getCartTotal();
+      totalEl.textContent = `₱${total.toLocaleString()}`;
+      if (payTotal) payTotal.textContent = `₱${total.toLocaleString()}`;
+
+      if (cart.length === 0) {
+        list.innerHTML = '';
+        empty.style.display = 'block';
+        footer.style.display = 'none';
+      } else {
+        empty.style.display = 'none';
+        footer.style.display = 'block';
+        list.innerHTML = cart.map(item => `
+      <div class="cart-item">
+        <img class="cart-item-img" src="${item.img}" alt="${item.name}">
+        <div class="cart-item-info">
+          <div class="cart-item-name">${item.name}</div>
+          <div class="cart-item-price">₱${item.price.toLocaleString()}</div>
+        </div>
+        <button class="cart-item-remove" onclick="removeFromCart(${item.id})">✕</button>
+      </div>
+    `).join('');
+      }
+    }
+
+    // ============ PAYMENT ============
+    function openPayment() {
+      if (cart.length === 0) {
+        showToast('Your cart is empty!', 'error');
+        return;
+      }
+      const total = getCartTotal();
+      document.getElementById('payTotalAmount').textContent = `₱${total.toLocaleString()}`;
+      closeModal('cartModal');
+      openModal('paymentModal');
+    }
+
+    function selectPayment(type, el) {
+      selectedPayment = type;
+      document.querySelectorAll('.payment-opt').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+    } function confirmPayment() {
+      const name = document.getElementById('payFullName').value.trim();
+      const contact = document.getElementById('payContact').value.trim();
+      if (!selectedPayment) {
+        showToast('⚠️ Please select a payment method!', 'error');
+        return;
+      }
+      if (!name || !contact) {
+        showToast('⚠️ Please fill in your details!', 'error');
+        return;
+      }
+
+      // Validation by type
+      if (selectedPayment === 'gcash' && !document.getElementById('gcashNum').value) {
+        showToast('⚠️ Enter your GCash number!', 'error');
+        return;
+      }
+      if (selectedPayment === 'maya' && !document.getElementById('mayaNum').value) {
+        showToast('⚠️ Enter your Maya number!', 'error');
+        return;
+      }
+
+      const ref = 'SF-' + Math.floor(100000 + Math.random() * 900000);
+      const payName = { gcash: 'GCash', maya: 'Maya', cash: 'En Cash (On Pickup)' }[selectedPayment];
+
+      document.getElementById('successIcon').textContent = selectedPayment === 'cash' ? '🤝' : '✅';
+      document.getElementById('successTitle').textContent = selectedPayment === 'cash' ? 'Reservation Confirmed!' : 'Payment Received!';
+      document.getElementById('successMsg').textContent = `Thank you, ${name}! Your payment via ${payName} has been recorded. We'll reach out to you at ${contact} shortly.`;
+      document.getElementById('successRef').textContent = `REF: ${ref}`;
+
+      cart = [];
+      updateCartCount();
+      openModal('successModal');
+      showToast('🎉 Order placed successfully!', 'success');
+    }
+    // ============ RESERVATION ============
+    function openReservation(productId) {
+      currentReserveItem = products.find(p => p.id === productId);
+      const preview = document.getElementById('reservationItemPreview');
+      preview.innerHTML = `
+    <img src="${currentReserveItem.img}" alt="${currentReserveItem.name}">
+    <div>
+      <div class="name">${currentReserveItem.name}</div>
+      <div class="price">₱${currentReserveItem.price.toLocaleString()}</div>
+    </div>
+  `;
+      // Set default dates
+      const today = new Date().toISOString().split('T')[0];
+      const inThreeDays = new Date(Date.now() + 3 * 86400000).toISOString().split('T')[0];
+      document.getElementById('resDateFrom').value = today;
+      document.getElementById('resDateTo').value = inThreeDays;
+      document.getElementById('resDateFrom').min = today;
+      openModal('reservationModal');
+    }
+
+    function submitReservation() {
+      const first = document.getElementById('resFirstName').value.trim();
+      const last = document.getElementById('resLastName').value.trim();
+      const contact = document.getElementById('resContact').value.trim();
+      const email = document.getElementById('resEmail').value.trim();
+      const payment = document.getElementById('resPayment').value;
+
+      if (!first || !last || !contact || !email || !payment) {
+        showToast('⚠️ Please fill in all fields!', 'error');
+        return;
+      }
+
+      const ref = 'RSV-' + Math.floor(100000 + Math.random() * 900000);
+      document.getElementById('successIcon').textContent = '📌';
+      document.getElementById('successTitle').textContent = 'Item Reserved!';
+      document.getElementById('successMsg').textContent = `${currentReserveItem.name} is reserved for you, ${first}! We'll hold it for 3 days. Check your email at ${email} for confirmation.`;
+      document.getElementById('successRef').textContent = `REF: ${ref}`;
+      closeModal('reservationModal');
+      openModal('successModal');
+      showToast('📌 Reservation confirmed!', 'success');
+    }
+
+    // ============ MODAL HELPERS ============
+    function openModal(id) {
+      document.getElementById(id).classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    // Close on backdrop click
+    document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+      backdrop.addEventListener('click', function (e) {
+        if (e.target === this) closeModal(this.id);
+      });
+    });
+    // ============ TOAST ============
+    function showToast(msg, type = '') {
+      const wrap = document.getElementById('toastWrap');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.textContent = msg;
+      wrap.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.animation = 'toastOut 0.3s forwards';
+        setTimeout(() => toast.remove(), 300);
+      }, 2800);
+    }
+
+
+    // ============ PARALLAX ============
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+
+      // Hero parallax
+      const heroBg = document.getElementById('heroBg');
+      if (heroBg) heroBg.style.transform = `scale(1.1) translateY(${scrollY * 0.3}px)`;
+
+      // Parallax quote section
+      const parallaxBg = document.getElementById('parallaxBg');
+      if (parallaxBg) {
+        const section = parallaxBg.closest('section');
+        const rect = section.getBoundingClientRect();
+        parallaxBg.style.transform = `translateY(${rect.top * 0.25}px)`;
+      }
+
+      // Sticky nav
+      const nav = document.getElementById('mainNav');
+      nav.classList.toggle('scrolled', scrollY > 60);
+    });
+
+
+    // ============ CURSOR ============
+    const cursor = document.getElementById('cursor');
+    const cursorDot = document.getElementById('cursorDot');
+    let cx = 0, cy = 0;
+    document.addEventListener('mousemove', e => {
+      cx = e.clientX; cy = e.clientY;
+      cursorDot.style.left = cx - 2.5 + 'px';
+      cursorDot.style.top = cy - 2.5 + 'px';
+      cursor.style.left = cx - 8 + 'px';
+      cursor.style.top = cy - 8 + 'px';
+    });
+    document.addEventListener('mousedown', () => { cursor.style.transform = 'scale(0.7)'; cursor.style.background = 'var(--rust)'; });
+    document.addEventListener('mouseup', () => { cursor.style.transform = 'scale(1)'; cursor.style.background = 'transparent'; });
+    document.querySelectorAll('button, a, .product-card, .cat-card, .payment-opt').forEach(el => {
+      el.addEventListener('mouseenter', () => { cursor.style.transform = 'scale(1.8)'; });
+      el.addEventListener('mouseleave', () => { cursor.style.transform = 'scale(1)'; });
+    });
+
+    // ============ HERO CYCLING TEXT ============
+    const heroCyclingTexts = [
+      "Find treasures, not trends",
+      "Style that saves the planet",
+      "Wear stories, not labels",
+      "Thrift bold, live unique",
+      "Fashion with a past, future, and purpose"
+    ];
+
+    let currentTextIndex = 0;
+    let cyclingTimer = null;
+
+    function initHeroCycling() {
+      // Create cycling text container if it doesn't exist
+      const heroContent = document.querySelector('.hero-content');
+      if (!document.querySelector('.cycling-text-container')) {
+        const cyclingContainer = document.createElement('div');
+        cyclingContainer.className = 'cycling-text-container';
+        cyclingContainer.innerHTML = `
+      <div class="cycling-text active" id="cycling-text-0">${heroCyclingTexts[0]}</div>
+      <div class="cycling-text" id="cycling-text-1">${heroCyclingTexts[1]}</div>
+      <div class="cycling-text" id="cycling-text-2">${heroCyclingTexts[2]}</div>
+      <div class="cycling-text" id="cycling-text-3">${heroCyclingTexts[3]}</div>
+      <div class="cycling-text" id="cycling-text-4">${heroCyclingTexts[4]}</div>
+    `;
+        // Insert after hero-sub
+        const heroSub = document.querySelector('.hero-sub');
+        heroContent.insertBefore(cyclingContainer, heroSub.nextSibling);
+      }
+
+      // Start cycling
+      cyclingTimer = setInterval(() => {
+        const currentText = document.querySelector('.cycling-text.active');
+        if (currentText) {
+          currentText.classList.remove('active');
+        }
+
+        currentTextIndex = (currentTextIndex + 1) % heroCyclingTexts.length;
+        const nextText = document.getElementById(`cycling-text-${currentTextIndex}`);
+        if (nextText) {
+          nextText.classList.add('active');
+        }
+      }, 4000); // Change text every 4 seconds
+    }
+
+
+    // ============ DYNAMIC NAVBAR COLORS ============
+    function initDynamicNavbarColors() {
+      const navbar = document.getElementById('mainNav');
+      const hero = document.querySelector('.hero');
+
+      // Initial setup
+      applyDynamicColors(navbar, '#ffffff');
+
+      window.addEventListener('scroll', () => {
+        const scrollPosition = window.scrollY;
+        const heroHeight = hero.offsetHeight;
+
+        // Calculate opacity based on scroll position
+        const opacity = Math.min(scrollPosition / 100, 1);
+        const backgroundColor = `rgba(250, 247, 242, ${opacity})`;
+
+        applyDynamicColors(navbar, backgroundColor);
+      });
+    }
+
+    function applyDynamicColors(navbar, backgroundColor) {
+      const textColor = getContrastColor(backgroundColor);
+
+      // Apply styles with smooth transitions
+      navbar.style.backgroundColor = backgroundColor;
+      navbar.style.color = textColor;
+
+      // Update link colors
+      const links = navbar.querySelectorAll('.nav-links a');
+      links.forEach(link => {
+        link.style.color = textColor;
+      });
+
+      // Update logo color
+      const logo = navbar.querySelector('.nav-logo');
+      if (logo) {
+        logo.style.color = textColor;
+        const logoSpan = logo.querySelector('span');
+        if (logoSpan) {
+          logoSpan.style.color = textColor === '#fff' ? '#C9973A' : '#B5451B';
+        }
+      }
+    }
+
+    function getContrastColor(hexColor) {
+      // Remove # if present
+      const color = hexColor.replace('#', '');
+
+      // Convert hex to RGB
+      const r = parseInt(color.substr(0, 2), 16);
+      const g = parseInt(color.substr(2, 2), 16);
+      const b = parseInt(color.substr(4, 2), 16);
+
+      // Calculate luminance
+      const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+
+      // Return black for light backgrounds, white for dark backgrounds
+      return luminance > 0.5 ? '#333333' : '#ffffff';
+    }
+
+    // ============ INPUT CURSOR FIX ============
+    function fixInputCursor() {
+      // Ensure all input fields have proper cursor style
+      const inputs = document.querySelectorAll('input');
+      inputs.forEach(input => {
+        input.style.cursor = 'text';
+      });
+
+      // Add search input with cursor fix
+
+    }
+
+    function handleSearch(event) {
+      const query = event.target.value.toLowerCase();
+      const productCards = document.querySelectorAll('.product-card');
+
+      productCards.forEach(card => {
+        const name = card.querySelector('.product-name').textContent.toLowerCase();
+        const category = card.querySelector('.product-category').textContent.toLowerCase();
+
+        if (name.includes(query) || category.includes(query)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // ============ INIT ============
+    renderCarousel();
+    initHeroCycling();
+    initDynamicNavbarColors();
+    fixInputCursor();
+  </script>
+</body>
+
+</html>
