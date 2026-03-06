@@ -80,8 +80,8 @@
     }
 
     nav.scrolled {
-      background: rgba(250, 247, 242, 0.97);
-      box-shadow: 0 2px 20px rgba(26, 18, 16, 0.08);
+      background: transparent;
+      box-shadow: none;
     }
 
     .nav-logo {
@@ -102,10 +102,11 @@
       display: flex;
       gap: 36px;
       list-style: none;
+
     }
 
     .nav-links a {
-      font-size: 0.82rem;
+      font-size: 1rem;
       font-weight: 700;
       letter-spacing: 1.5px;
       text-transform: uppercase;
@@ -185,7 +186,8 @@
     .hero-bg {
       position: absolute;
       inset: 0;
-      background: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1800&q=80') center/cover no-repeat;
+      background: transparent;
+      backdrop-filter: blur (5px);
       opacity: 0.35;
       transform: scale(1.1);
       will-change: transform;
@@ -210,7 +212,7 @@
 
     .hero-tag {
       font-family: 'Space Mono', monospace;
-      font-size: 0.72rem;
+      font-size: 1rem;
       letter-spacing: 4px;
       text-transform: uppercase;
       color: var(--gold);
@@ -423,7 +425,7 @@
 
     .section-tag {
       font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
+      font-size: 2.5rem;
       letter-spacing: 3px;
       text-transform: uppercase;
       color: var(--rust);
@@ -887,7 +889,7 @@
     /* FOOTER */
     footer {
       background: var(--char);
-      color: rgba(255, 255, 255, 0.7);
+      color: white;
       padding: 80px 60px 40px;
     }
 
@@ -915,7 +917,7 @@
       font-size: 0.72rem;
       letter-spacing: 2.5px;
       text-transform: uppercase;
-      color: #fff;
+      color: black;
       margin-bottom: 20px;
       font-family: 'Space Mono', monospace;
     }
@@ -940,11 +942,11 @@
 
     .footer-bottom {
       border-top: 1px solid rgba(255, 255, 255, 0.1);
-      padding-top: 28px;
+      padding-top: 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.78rem;
+      font-size: 0.2rem;
     }
 
     .pay-badges {
@@ -1536,6 +1538,40 @@
         padding: 60px 24px 32px;
       }
     }
+
+    .carousel {
+      position: relative;
+      width: 314px;
+      /* portrait width */
+      height: 498px;
+      /* portrait height */
+      overflow: hidden;
+      margin: 2rem auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .carousel-tracky {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+
+    .carousel-items {
+      flex: 0 0 auto;
+      min-width: 314px;
+      /* same as carousel width */
+      height: 498px;
+      /* same as carousel height */
+      flex-shrink: 0;
+    }
+
+    .carousel-items img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      /* keeps portrait feel */
+
+    }
   </style>
 </head>
 
@@ -1550,7 +1586,9 @@
 
   <!-- NAV -->
   <nav id="mainNav">
-    <a href="#" class="nav-logo">Supremo<span>Finds</span></a>
+    <a href="#" class="nav-logo">
+      <img src="sdeputa-removebg-preview.png" alt="Supremo Finds Logo" style="height: 70px; width: auto; ;">
+    </a>
     <ul class="nav-links">
       <li><a href="#new">New Drops</a></li>
       <li><a href="#categories">Categories</a></li>
@@ -1668,12 +1706,32 @@
   <!-- ABOUT -->
   <section class="about-strip" id="about">
     <div class="about-text">
+
+      <div class="carousel">
+        <div class="carousel-tracky">
+          <div class="carousel-items">
+            <img src="1.png" alt="Portrait 1">
+          </div>
+          <div class="carousel-items">
+            <img src="22.jpeg" alt="Portrait 2">
+          </div>
+          <div class="carousel-items">
+            <img src="333.jpeg" alt="Portrait 3">
+          </div>
+          <div class="carousel-items">
+            <img src="444.jpeg" alt="Portrait 4">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="text-content">
       <div class="section-header">
         <span class="section-tag">Who We Are</span>
         <h2 class="section-title">The Story of<br><em>Supremo Finds</em></h2>
       </div>
       <p>Born from a love of vintage fashion and sustainable living, Supremo Finds started as a small thrift stall in
-        the streets of Dagupan. Today, we're the Philippines' most trusted online thrift destination — curating only the
+        the streets of Dagupan. Today, we're the Philippines' most trusted online thrift destination — curating only
+        the
         best pre-loved items for fashion-forward Filipinos.</p>
       <p>Every item is hand-inspected, quality-checked, and given a second shot at life. We believe that looking good
         shouldn't cost the earth — or your wallet.</p>
@@ -1682,27 +1740,9 @@
           <span class="stat-num">4.8K+</span>
           <span class="stat-label">Items Sold</span>
         </div>
-        <div class="stat">
-          <span class="stat-num">2.1K</span>
-          <span class="stat-label">Happy Customers</span>
-        </div>
-        <div class="stat">
-          <span class="stat-num">98%</span>
-          <span class="stat-label">Satisfaction</span>
-        </div>
       </div>
     </div>
-    <div class="about-img-collage">
-      <div class="collage-img">
-        <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=600&q=80" alt="Thrift">
-      </div>
-      <div class="collage-img">
-        <img src="https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=600&q=80" alt="Thrift">
-      </div>
-      <div class="collage-img">
-        <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80" alt="Thrift">
-      </div>
-    </div>
+
   </section>
 
   <!-- FOOTER -->
@@ -1738,7 +1778,6 @@
           <li><a href="#">Instagram</a></li>
           <li><a href="#">Facebook</a></li>
           <li><a href="#">TikTok</a></li>
-          <li><a href="#">Shopee</a></li>
         </ul>
       </div>
     </div>
@@ -1929,15 +1968,94 @@
 
   <script>
     // ============ DATA ============
-    const products = [
-      { id: 1, name: 'Vintage Levi\'s 501 Jeans', category: 'Bottoms', price: 650, original: 2800, condition: 'Like New', badge: 'Hot', badgeType: '', img: 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&q=80' },
-      { id: 2, name: 'Ralph Lauren Polo Shirt', category: 'Tops', price: 390, original: 1500, condition: 'Excellent', badge: 'New', badgeType: 'gold', img: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=600&q=80' },
-      { id: 3, name: 'Nike Air Force 1 (US9)', category: 'Shoes', price: 1200, original: 5500, condition: 'Good', badge: 'Rare', badgeType: 'sage', img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80' },
-      { id: 4, name: 'Vintage Denim Jacket', category: 'Outerwear', price: 850, original: 3200, condition: 'Very Good', badge: 'Hot', badgeType: '', img: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&q=80' },
-      { id: 5, name: 'Coach Leather Bag', category: 'Bags', price: 1600, original: 8000, condition: 'Like New', badge: 'New', badgeType: 'gold', img: 'https://images.unsplash.com/photo-1547949003-9792a18a2601?w=600&q=80' },
-      { id: 6, name: 'Tommy Hilfiger Crewneck', category: 'Tops', price: 420, original: 1800, condition: 'Excellent', badge: '', badgeType: '', img: 'https://images.unsplash.com/photo-1625910513902-b0f5e3de2d4e?w=600&q=80' },
-      { id: 7, name: 'Vintage Adidas Windbreaker', category: 'Outerwear', price: 720, original: 2500, condition: 'Good', badge: 'Rare', badgeType: 'sage', img: 'https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80' },
-      { id: 8, name: 'Leather Oxford Shoes (EU42)', category: 'Shoes', price: 980, original: 4200, condition: 'Very Good', badge: '', badgeType: '', img: 'https://images.unsplash.com/photo-1449505278894-297fdb3edbc1?w=600&q=80' },
+    const products = [{
+        id: 1,
+        name: 'Vintage Levi\'s 501 Jeans',
+        category: 'Bottoms',
+        price: 650,
+        original: 2800,
+        condition: 'Like New',
+        badge: 'Hot',
+        badgeType: '',
+        img: 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&q=80'
+      },
+      {
+        id: 2,
+        name: 'Ralph Lauren Polo Shirt',
+        category: 'Tops',
+        price: 390,
+        original: 1500,
+        condition: 'Excellent',
+        badge: 'New',
+        badgeType: 'gold',
+        img: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=600&q=80'
+      },
+      {
+        id: 3,
+        name: 'Nike Air Force 1 (US9)',
+        category: 'Shoes',
+        price: 1200,
+        original: 5500,
+        condition: 'Good',
+        badge: 'Rare',
+        badgeType: 'sage',
+        img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80'
+      },
+      {
+        id: 4,
+        name: 'Vintage Denim Jacket',
+        category: 'Outerwear',
+        price: 850,
+        original: 3200,
+        condition: 'Very Good',
+        badge: 'Hot',
+        badgeType: '',
+        img: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&q=80'
+      },
+      {
+        id: 5,
+        name: 'Coach Leather Bag',
+        category: 'Bags',
+        price: 1600,
+        original: 8000,
+        condition: 'Like New',
+        badge: 'New',
+        badgeType: 'gold',
+        img: 'https://images.unsplash.com/photo-1547949003-9792a18a2601?w=600&q=80'
+      },
+      {
+        id: 6,
+        name: 'Tommy Hilfiger Crewneck',
+        category: 'Tops',
+        price: 420,
+        original: 1800,
+        condition: 'Excellent',
+        badge: '',
+        badgeType: '',
+        img: 'https://images.unsplash.com/photo-1625910513902-b0f5e3de2d4e?w=600&q=80'
+      },
+      {
+        id: 7,
+        name: 'Vintage Adidas Windbreaker',
+        category: 'Outerwear',
+        price: 720,
+        original: 2500,
+        condition: 'Good',
+        badge: 'Rare',
+        badgeType: 'sage',
+        img: 'https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80'
+      },
+      {
+        id: 8,
+        name: 'Leather Oxford Shoes (EU42)',
+        category: 'Shoes',
+        price: 980,
+        original: 4200,
+        condition: 'Very Good',
+        badge: '',
+        badgeType: '',
+        img: 'https://images.unsplash.com/photo-1449505278894-297fdb3edbc1?w=600&q=80'
+      },
     ];
 
     // ============ CART STATE ============
@@ -1991,7 +2109,10 @@
         showToast('⚠️ Already in cart!');
         return;
       }
-      cart.push({ ...product, qty: 1 });
+      cart.push({
+        ...product,
+        qty: 1
+      });
       updateCartCount();
 
       const btn = document.getElementById(`addBtn-${productId}`);
@@ -2060,6 +2181,7 @@
       }
     }
 
+
     // ============ PAYMENT ============
     function openPayment() {
       if (cart.length === 0) {
@@ -2076,7 +2198,9 @@
       selectedPayment = type;
       document.querySelectorAll('.payment-opt').forEach(o => o.classList.remove('selected'));
       el.classList.add('selected');
-    } function confirmPayment() {
+    }
+
+    function confirmPayment() {
       const name = document.getElementById('payFullName').value.trim();
       const contact = document.getElementById('payContact').value.trim();
       if (!selectedPayment) {
@@ -2099,11 +2223,17 @@
       }
 
       const ref = 'SF-' + Math.floor(100000 + Math.random() * 900000);
-      const payName = { gcash: 'GCash', maya: 'Maya', cash: 'En Cash (On Pickup)' }[selectedPayment];
+      const payName = {
+        gcash: 'GCash',
+        maya: 'Maya',
+        cash: 'En Cash (On Pickup)'
+      } [selectedPayment];
 
       document.getElementById('successIcon').textContent = selectedPayment === 'cash' ? '🤝' : '✅';
-      document.getElementById('successTitle').textContent = selectedPayment === 'cash' ? 'Reservation Confirmed!' : 'Payment Received!';
-      document.getElementById('successMsg').textContent = `Thank you, ${name}! Your payment via ${payName} has been recorded. We'll reach out to you at ${contact} shortly.`;
+      document.getElementById('successTitle').textContent = selectedPayment === 'cash' ? 'Reservation Confirmed!' :
+        'Payment Received!';
+      document.getElementById('successMsg').textContent =
+        `Thank you, ${name}! Your payment via ${payName} has been recorded. We'll reach out to you at ${contact} shortly.`;
       document.getElementById('successRef').textContent = `REF: ${ref}`;
 
       cart = [];
@@ -2146,7 +2276,8 @@
       const ref = 'RSV-' + Math.floor(100000 + Math.random() * 900000);
       document.getElementById('successIcon').textContent = '📌';
       document.getElementById('successTitle').textContent = 'Item Reserved!';
-      document.getElementById('successMsg').textContent = `${currentReserveItem.name} is reserved for you, ${first}! We'll hold it for 3 days. Check your email at ${email} for confirmation.`;
+      document.getElementById('successMsg').textContent =
+        `${currentReserveItem.name} is reserved for you, ${first}! We'll hold it for 3 days. Check your email at ${email} for confirmation.`;
       document.getElementById('successRef').textContent = `REF: ${ref}`;
       closeModal('reservationModal');
       openModal('successModal');
@@ -2158,6 +2289,7 @@
       document.getElementById(id).classList.add('active');
       document.body.style.overflow = 'hidden';
     }
+
     function closeModal(id) {
       document.getElementById(id).classList.remove('active');
       document.body.style.overflow = '';
@@ -2208,19 +2340,31 @@
     // ============ CURSOR ============
     const cursor = document.getElementById('cursor');
     const cursorDot = document.getElementById('cursorDot');
-    let cx = 0, cy = 0;
+    let cx = 0,
+      cy = 0;
     document.addEventListener('mousemove', e => {
-      cx = e.clientX; cy = e.clientY;
+      cx = e.clientX;
+      cy = e.clientY;
       cursorDot.style.left = cx - 2.5 + 'px';
       cursorDot.style.top = cy - 2.5 + 'px';
       cursor.style.left = cx - 8 + 'px';
       cursor.style.top = cy - 8 + 'px';
     });
-    document.addEventListener('mousedown', () => { cursor.style.transform = 'scale(0.7)'; cursor.style.background = 'var(--rust)'; });
-    document.addEventListener('mouseup', () => { cursor.style.transform = 'scale(1)'; cursor.style.background = 'transparent'; });
+    document.addEventListener('mousedown', () => {
+      cursor.style.transform = 'scale(0.7)';
+      cursor.style.background = 'var(--rust)';
+    });
+    document.addEventListener('mouseup', () => {
+      cursor.style.transform = 'scale(1)';
+      cursor.style.background = 'transparent';
+    });
     document.querySelectorAll('button, a, .product-card, .cat-card, .payment-opt').forEach(el => {
-      el.addEventListener('mouseenter', () => { cursor.style.transform = 'scale(1.8)'; });
-      el.addEventListener('mouseleave', () => { cursor.style.transform = 'scale(1)'; });
+      el.addEventListener('mouseenter', () => {
+        cursor.style.transform = 'scale(1.8)';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.transform = 'scale(1)';
+      });
     });
 
     // ============ HERO CYCLING TEXT ============
@@ -2268,33 +2412,38 @@
       }, 4000); // Change text every 4 seconds
     }
 
-
-    // ============ DYNAMIC NAVBAR COLORS ============
     function initDynamicNavbarColors() {
       const navbar = document.getElementById('mainNav');
       const hero = document.querySelector('.hero');
 
-      // Initial setup
-      applyDynamicColors(navbar, '#ffffff');
+      // Initial setup (before scrolling)
+      applyDynamicColors(navbar, 0);
 
       window.addEventListener('scroll', () => {
         const scrollPosition = window.scrollY;
         const heroHeight = hero.offsetHeight;
+        const opacity = Math.min(scrollPosition / heroHeight, 1);
 
-        // Calculate opacity based on scroll position
-        const opacity = Math.min(scrollPosition / 100, 1);
-        const backgroundColor = `rgba(250, 247, 242, ${opacity})`;
-
-        applyDynamicColors(navbar, backgroundColor);
+        // Update dynamically (after scrolling)
+        applyDynamicColors(navbar, opacity);
       });
     }
 
-    function applyDynamicColors(navbar, backgroundColor) {
-      const textColor = getContrastColor(backgroundColor);
+    // ============ DYNAMIC NAVBAR COLORS ============
+    function applyDynamicColors(navbar, opacity = 0) {
+      // Select the element with the class
 
-      // Apply styles with smooth transitions
-      navbar.style.backgroundColor = backgroundColor;
-      navbar.style.color = textColor;
+      // Smooth transitions
+      navbar.style.transition = 'color 0.3s ease, background-color 0.3s ease, backdrop-filter 0.3s ease';
+
+      // Transparent background with blur
+      navbar.style.backgroundColor = `transparent`;
+      // adjust blur strength as needed
+
+      // Contrast text color based on categories background
+      const bgColor = window.getComputedStyle(navbar).backgroundColor;
+      const textColor = getContrastColor(bgColor);
+
 
       // Update link colors
       const links = navbar.querySelectorAll('.nav-links a');
@@ -2313,21 +2462,19 @@
       }
     }
 
-    function getContrastColor(hexColor) {
-      // Remove # if present
-      const color = hexColor.replace('#', '');
 
-      // Convert hex to RGB
-      const r = parseInt(color.substr(0, 2), 16);
-      const g = parseInt(color.substr(2, 2), 16);
-      const b = parseInt(color.substr(4, 2), 16);
+    function getContrastColor(colorString) {
+      // Extract numbers from rgb(...) or rgba(...)
+      const rgba = colorString.match(/\d+/g).map(Number);
+      const [r, g, b] = rgba;
 
       // Calculate luminance
       const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
 
-      // Return black for light backgrounds, white for dark backgrounds
-      return luminance > 0.5 ? '#333333' : '#ffffff';
+      // Return black for light backgrounds, white for dark
+      return luminance > 0.5 ? '#C9973A' : '#C9973A';
     }
+
 
     // ============ INPUT CURSOR FIX ============
     function fixInputCursor() {
@@ -2356,6 +2503,24 @@
         }
       });
     }
+    const track = document.querySelector('.carousel-tracky');
+    const items = document.querySelectorAll('.carousel-items');
+    let index = 0;
+
+    function updateCarousel() {
+      const itemWidth = items[0].offsetWidth; // dynamically measure width
+      track.style.transform = `translateX(-${index * itemWidth}px)`;
+    }
+
+
+    // Auto-scroll every 3 seconds
+    setInterval(() => {
+      index++;
+      if (index >= items.length) {
+        index = 0; // loop back to first image
+      }
+      updateCarousel();
+    }, 3000);
 
     // ============ INIT ============
     renderCarousel();
